@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="Definition"
+             targetNamespace="http://bpmn.io/schema/bpmn">
+  <process id="Process_AtendimentoChamados" name="Atendimento de Chamados - Sustentação e Projetos" isExecutable="false">
+
+    <startEvent id="StartEvent" name="Início"/>
+    
+    <task id="Task_Registrar" name="Registrar Chamado"/>
+    
+    <exclusiveGateway id="Gateway_Tipo" name="Verificar Tipo"/>
+
+    <sequenceFlow id="Flow_Start_Registrar" sourceRef="StartEvent" targetRef="Task_Registrar" />
+    <sequenceFlow id="Flow_Registrar_Gateway" sourceRef="Task_Registrar" targetRef="Gateway_Tipo" />
+
+    <!-- BUG -->
+    <sequenceFlow id="Flow_BUG" sourceRef="Gateway_Tipo" targetRef="Task_Sustentacao" name="BUG"/>
+    <task id="Task_Sustentacao" name="Atender Chamado (Sustentação)"/>
+    <sequenceFlow id="Flow_Sustentacao_Fechamento" sourceRef="Task_Sustentacao" targetRef="Task_Fechamento"/>
+
+    <!-- MELHORIA -->
+    <sequenceFlow id="Flow_Melhoria" sourceRef="Gateway_Tipo" targetRef="Task_Projetos" name="MELHORIA"/>
+    <task id="Task_Projetos" name="Encaminhar para Projetos e Priorizar com PO"/>
+    <sequenceFlow id="Flow_Projetos_Fechamento" sourceRef="Task_Projetos" targetRef="Task_Fechamento"/>
+
+    <!-- Fechamento -->
+    <task id="Task_Fechamento" name="Fechar Chamado"/>
+    <endEvent id="EndEvent" name="Fim"/>
+
+    <sequenceFlow id="Flow_Fechamento_Fim" sourceRef="Task_Fechamento" targetRef="EndEvent" />
+
+  </process>
+</definitions>
